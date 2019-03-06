@@ -66,7 +66,7 @@
         <br>
         <div class="row">
             <h3 class="col s12">liff.openWindow(params)</h3>
-            <button class="col s4 btn waves-effect waves-light" type="submit" name="action" id="closewindowbutton">TEST
+            <button class="col s4 btn waves-effect waves-light" type="submit" id="openwindowbutton">TEST
                 <i class="material-icons right">send</i>
             </button>
         </div>
@@ -92,22 +92,22 @@
         <p>Returns the current user's access token as a string value. Can use Social API.</p>
         <hr>
         <table class="responsive-table highlight striped">
-                <thead>
-                    <tr>
-                        <th>accessToken</th>
-                    </tr>
-                </thead>
-    
-                <tbody>
-                    <tr>
-                        <td id="getaccesstoken">no accessToken</td>
-                    </tr>
-                </tbody>
-            </table>
+            <thead>
+                <tr>
+                    <th>accessToken</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td id="getaccesstoken">no accessToken</td>
+                </tr>
+            </tbody>
+        </table>
         <br>
         <h3 class="row">liff.getProfile()</h3>
         <hr>
-        <table class="responsive-table highlight striped">
+        <table class="responsive-table highlight striped centered">
             <thead>
                 <tr>
                     <th>userId</th>
@@ -121,7 +121,7 @@
                 <tr>
                     <td id="profile-userId">no profile</td>
                     <td id="profile-displayName">no profile</td>
-                    <td id="profile-pictureUrl">no profile</td>
+                    <td><img src="" alt="" class="circle responsive-img" id="profile-pictureUrl"></td>
                     <td id="profile-statusMessage">no profile</td>
                 </tr>
             </tbody>
@@ -134,10 +134,10 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">mode_edit</i>
-                        <textarea id="message-input" class="materialize-textarea"></textarea>
+                        <input id="message-input" type="text" class="validate">
                         <label for="message-input">Text Message</label>
                     </div>
-                    <button class="col s4 btn waves-effect waves-light" type="submit" name="action" id="sendmessagebutton">Send
+                    <button class="col s4 btn waves-effect waves-light" type="submit" id="sendmessagebutton">Send
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
@@ -145,11 +145,11 @@
         </div>
         <br>
         <div class="row">
-                <h3 class="col s12">liff.closeWindow()</h3>
-                <button class="col s4 btn waves-effect waves-light" type="submit" name="action" id="closewindowbutton">Close
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
+            <h3 class="col s12">liff.closeWindow()</h3>
+            <button class="col s4 btn waves-effect waves-light" type="submit" id="closewindowbutton">Close
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
     </div>
 
     <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
@@ -179,53 +179,47 @@
             document.getElementById('data-context-utouId').textContent = data.context.utouId;
             document.getElementById('data-context-roomId').textContent = data.context.roomId;
             document.getElementById('data-context-groupId').textContent = data.context.groupId;
-        
+
             // openWindow call
             document.getElementById('openwindowbutton').addEventListener('click', function () {
                 liff.openWindow({
-                    url: 'https://developers.line.biz/en/reference/liff/'
+                    url: 'https://developers.line.biz/en/reference/liff/',
+                    external: true
                 });
             });
-        
+
             // closeWindow call
             document.getElementById('closewindowbutton').addEventListener('click', function () {
                 liff.closeWindow();
             });
-        
+
             // sendMessages call
             document.getElementById('sendmessagebutton').addEventListener('click', function () {
+                const message = document.getElementById('message-input').value;
                 liff.sendMessages([{
                     type: 'text',
-                    text: document.getElementById('message-input').textContent
-                }, {
-                    type: 'sticker',
-                    packageId: '2',
-                    stickerId: '144'
+                    text: message
                 }]).then(function () {
                     window.alert("Message sent");
                 }).catch(function (error) {
                     handleError(error);
                 });
             });
-        
+
             // get access token
             const accessToken = liff.getAccessToken();
             document.getElementById('getaccesstoken').textContent = accessToken;
-        
+
             // get profile call
             liff.getProfile().then(function (profile) {
                 document.getElementById('profile-userId').textContent = profile.userId;
                 document.getElementById('profile-displayName').textContent = profile.displayName;
-    
-                const profilePictureDiv = document.getElementById('profile-displayName');
-                if (profilePictureDiv.firstElementChild) {
-                    profilePictureDiv.removeChild(profilePictureDiv.firstElementChild);
-                }
-                const img = document.createElement('img');
-                img.src = profile.displayName;
-                img.alt = "Profile Picture";
-                profilePictureDiv.appendChild(img);
-    
+
+                const profilePictureImg = document.getElementById('profile-pictureUrl');
+                profilePictureImg.src = profile.pictureUrl;
+                profilePictureImg.alt = "Profile Picture";
+
+
                 document.getElementById('profile-statusMessage').textContent = profile.statusMessage;
             }).catch(function (error) {
                 handleError(error);
