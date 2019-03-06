@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LIFF Doc</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 style="color:#00bfa5;">Hello Line LIFF</h1>
+        <a href="https://developers.line.biz/en/reference/liff/">line liff develop doc</a>
+        <br>
+        <h3 class="row">LIFF SDK errors</h3>
+        <hr>
+        <table class="responsive-table highlight striped">
+            <thead>
+                <tr>
+                    <th>code</th>
+                    <th>message</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td id="liff-err-code">no error</td>
+                    <td id="liff-err-message">no message</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h3 class="row">liff.init(brsuccessCallback: data, errorCallback: error)</h3>
+        <hr>
+        <p>Returns a data object that contains the information necessary to make various API calls.</p>
+        <table class="responsive-table highlight striped">
+            <thead>
+                <tr>
+                    <th>language</th>
+                    <th>context.type</th>
+                    <th>context.viewType</th>
+                    <th>context.userId</th>
+                    <th>context.utouId</th>
+                    <th>context.roomId</th>
+                    <th>context.groupId</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td id="data-language">no data</td>
+                    <td id="data-context-type">no data</td>
+                    <td id="data-context-viewType">no data</td>
+                    <td id="data-context-userId">no data</td>
+                    <td id="data-context-utouId">no data</td>
+                    <td id="data-context-roomId">no data</td>
+                    <td id="data-context-groupId">no data</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <div class="row">
+            <h3 class="col s12">liff.openWindow(params)</h3>
+            <button class="col s4 btn waves-effect waves-light" type="submit" name="action" id="closewindowbutton">TEST
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+        <hr>
+        <table class="responsive-table highlight striped">
+            <thead>
+                <tr>
+                    <th>url</th>
+                    <th>external</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Specify the absolute path to the URL.</td>
+                    <td>Whether to open the URL in an external browser. Specify one of the following values: The
+                        default value is false.</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h3 class="row">liff.getAccessToken()</h3>
+        <p>Returns the current user's access token as a string value. Can use Social API.</p>
+        <hr>
+        <table class="responsive-table highlight striped">
+                <thead>
+                    <tr>
+                        <th>accessToken</th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    <tr>
+                        <td id="getaccesstoken">no accessToken</td>
+                    </tr>
+                </tbody>
+            </table>
+        <br>
+        <h3 class="row">liff.getProfile()</h3>
+        <hr>
+        <table class="responsive-table highlight striped">
+            <thead>
+                <tr>
+                    <th>userId</th>
+                    <th>displayName</th>
+                    <th>pictureUrl</th>
+                    <th>statusMessage</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td id="profile-userId">no profile</td>
+                    <td id="profile-displayName">no profile</td>
+                    <td id="profile-pictureUrl">no profile</td>
+                    <td id="profile-statusMessage">no profile</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <h3 class="row">liff.sendMessages(messages)</h3>
+        <a href="https://developers.line.biz/en/reference/messaging-api/#message-objects">message objects doc</a>
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <textarea id="message-input" class="materialize-textarea"></textarea>
+                        <label for="message-input">Text Message</label>
+                    </div>
+                    <button class="col s4 btn waves-effect waves-light" type="submit" name="action" id="sendmessagebutton">Send
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <br>
+        <div class="row">
+                <h3 class="col s12">liff.closeWindow()</h3>
+                <button class="col s4 btn waves-effect waves-light" type="submit" name="action" id="closewindowbutton">Close
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+    </div>
+
+    <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        window.onload = function (e) {
+            liff.init(
+                function (data) {
+                    initializeApp(data);
+                },
+                function (err) {
+                    handleError(err);
+                }
+            );
+        };
+
+        function handleError(err) {
+            document.getElementById('liff-err-code').textContent = err.code;
+            document.getElementById('liff-err-message').textContent = err.message;
+        }
+
+        function initializeApp(data) {
+            document.getElementById('data-language').textContent = data.language;
+            document.getElementById('data-context-type').textContent = data.context.type;
+            document.getElementById('data-context-viewType').textContent = data.context.viewType;
+            document.getElementById('data-context-userId').textContent = data.context.userId;
+            document.getElementById('data-context-utouId').textContent = data.context.utouId;
+            document.getElementById('data-context-roomId').textContent = data.context.roomId;
+            document.getElementById('data-context-groupId').textContent = data.context.groupId;
+        
+            // openWindow call
+            document.getElementById('openwindowbutton').addEventListener('click', function () {
+                liff.openWindow({
+                    url: 'https://developers.line.biz/en/reference/liff/'
+                });
+            });
+        
+            // closeWindow call
+            document.getElementById('closewindowbutton').addEventListener('click', function () {
+                liff.closeWindow();
+            });
+        
+            // sendMessages call
+            document.getElementById('sendmessagebutton').addEventListener('click', function () {
+                liff.sendMessages([{
+                    type: 'text',
+                    text: document.getElementById('message-input').textContent
+                }, {
+                    type: 'sticker',
+                    packageId: '2',
+                    stickerId: '144'
+                }]).then(function () {
+                    window.alert("Message sent");
+                }).catch(function (error) {
+                    handleError(error);
+                });
+            });
+        
+            // get access token
+            const accessToken = liff.getAccessToken();
+            document.getElementById('getaccesstoken').textContent = accessToken;
+        
+            // get profile call
+            liff.getProfile().then(function (profile) {
+                document.getElementById('profile-userId').textContent = profile.userId;
+                document.getElementById('profile-displayName').textContent = profile.displayName;
+    
+                const profilePictureDiv = document.getElementById('profile-displayName');
+                if (profilePictureDiv.firstElementChild) {
+                    profilePictureDiv.removeChild(profilePictureDiv.firstElementChild);
+                }
+                const img = document.createElement('img');
+                img.src = profile.displayName;
+                img.alt = "Profile Picture";
+                profilePictureDiv.appendChild(img);
+    
+                document.getElementById('profile-statusMessage').textContent = profile.statusMessage;
+            }).catch(function (error) {
+                handleError(error);
+            });
+        }
+    </script>
+</body>
+
+</html>
